@@ -1,3 +1,3 @@
 $.onshake(function() {
-	alert('Don\'t stop!');
-}, 50);
+  alert('Don\'t stop!');
+});

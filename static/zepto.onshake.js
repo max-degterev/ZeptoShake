@@ -3,19 +3,12 @@
 
   if (typeof window.DeviceMotionEvent !== 'undefined') {
     $.onshake = function(callback, _sensitivity) {
-
-      // Shake sensitivity (a lower number is more sensitive)
-      var sensitivity = typeof _sensitivity === 'number' ? _sensitivity : 20,
-        checkDelay = 100,
-        callbackDelay = 2500; // protection from having 9999 calls at once
+      var sensitivity = Math.floor(100 / (_sensitivity || 3)),
+          checkDelay = 100,
+          callbackDelay = 2500; // protection from having multiple calls too often
 
       // Position variables
-      var x1 = 0,
-          y1 = 0,
-          z1 = 0,
-          x2 = 0,
-          y2 = 0,
-          z2 = 0;
+      var x1 = y1 = z1 = x2 = y2 = z2 = 0;
 
       var checkDeviceMotion = function() {
         var change = Math.abs((x1 - x2) + (y1 - y2) + (z1 - z2));
@@ -25,8 +18,8 @@
         y2 = y1;
         z2 = z1;
 
-        if (change > sensitivity) {
-          callback.call(window, change);
+        if (change >= sensitivity) {
+          callback.call(window);
           $window.trigger('shake');
           setTimeout(checkDeviceMotion, callbackDelay);
         }
